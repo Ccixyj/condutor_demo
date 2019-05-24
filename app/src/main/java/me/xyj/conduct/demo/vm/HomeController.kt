@@ -4,18 +4,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import kotlinx.android.synthetic.main.controller_home.view.*
 import leakcanary.LeakSentry
+import me.xyj.conduct.demo.R
+import me.xyj.conduct.demo.list.RecycleController
+import me.xyj.conduct.demo.vm.base.ViewModelController
 import org.koin.core.KoinComponent
 import org.koin.core.get
 
-class HomeController : LifecycleController(), KoinComponent {
+class HomeController : ViewModelController(), KoinComponent {
 
     init {
         LeakSentry.refWatcher.watch(this)
@@ -28,22 +30,36 @@ class HomeController : LifecycleController(), KoinComponent {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         Log.d("HomeController", "onCreateView $vm")
 
-
-        return TextView(inflater.context).apply {
-            text = this@HomeController::class.java.name
-            setOnClickListener {
-                router.pushController(
-                    RouterTransaction.with(SecondController()).pushChangeHandler(
-                        get<HorizontalChangeHandler>()
-                    )
-                        .popChangeHandler(get<FadeChangeHandler>())
+        lifecycle.addObserver(vm)
+        val view = inflater.inflate(R.layout.controller_home, container,false)
+        view.tv_second.setOnClickListener {
+            router.pushController(
+                RouterTransaction.with(SecondController()).pushChangeHandler(
+                    get<HorizontalChangeHandler>()
                 )
-            }
+                    .popChangeHandler(get<FadeChangeHandler>())
+            )
         }
+
+        view.tv_recycle.setOnClickListener {
+            router.pushController(
+                RouterTransaction.with(RecycleController()).pushChangeHandler(
+                    get<HorizontalChangeHandler>()
+                ).pushChangeHandler(
+                    get<HorizontalChangeHandler>()
+                )
+            )
+        }
+
+        return view
+    }
+
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
     }
 
     override fun onDestroy() {
-
         Log.d("HomeController", "onDestroy   $vm")
         super.onDestroy()
     }

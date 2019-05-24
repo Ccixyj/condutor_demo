@@ -9,6 +9,7 @@ import me.xyj.conduct.demo.vm.DemoRepo
 import me.xyj.conduct.demo.vm.SecondViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
@@ -19,7 +20,13 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         LeakSentry.config =
-            LeakSentry.config.copy(watchFragmentViews = true, watchActivities = true)
+            LeakSentry.config.copy(
+                watchFragmentViews = true,
+                watchActivities = true,
+                enabled = true,
+                watchFragments = true,
+                watchDurationMillis = 30000
+            )
         LeakCanary.config =
             LeakCanary.config.copy(retainedVisibleThreshold = 1)
         startKoin {
@@ -32,6 +39,7 @@ class App : Application() {
             val repos = module {
                 single { DemoRepo() }
                 single { SecondViewModel.Factory(get()) }
+                viewModel { SecondViewModel(get()) }
             }
             loadKoinModules(MainActivity.mainModule, controllerModuel, repos)
         }

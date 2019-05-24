@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
@@ -17,7 +19,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,LifecycleOwner{
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,16 +51,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun getLifecycle(): Lifecycle {
+        return super.getLifecycle()
+    }
+
     companion object {
         val mainModule = module {
 
             scope(named<MainActivity>()) {
                 scoped { (activity: Activity, container: ViewGroup, savedInstanceState: Bundle?) ->
                     Conductor.attachRouter(activity, container, savedInstanceState)
-
                 }
             }
-
         }
     }
 }

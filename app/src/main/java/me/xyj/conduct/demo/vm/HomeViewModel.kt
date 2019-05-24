@@ -1,11 +1,12 @@
 package me.xyj.conduct.demo.vm
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import leakcanary.LeakSentry
 
-class HomeViewModel() : ViewModel() {
+class HomeViewModel : ViewModel(), LifecycleObserver {
 
+    val live = MutableLiveData<String>()
 
     init {
         LeakSentry.refWatcher.watch(this)
@@ -13,7 +14,13 @@ class HomeViewModel() : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("HomeViewModel" ,"onCleared")
+        Log.d("HomeViewModel", "onCleared")
     }
 
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
+    fun event(owner: LifecycleOwner, event: Lifecycle.Event) {
+        Log.d("SecondViewModel", "$event / ${owner.lifecycle.currentState}: owner -> $owner ")
+        live.value = "$event / ${owner.lifecycle.currentState}: owner -> $owner "
+    }
 }

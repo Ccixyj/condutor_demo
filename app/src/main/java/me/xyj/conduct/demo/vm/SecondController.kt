@@ -6,34 +6,42 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
+import com.bumptech.glide.Glide
 import leakcanary.LeakSentry
+import me.xyj.conduct.demo.vm.base.ViewModelController
 import org.koin.core.KoinComponent
 import org.koin.core.get
 
-class SecondController : LifecycleController(), KoinComponent {
+class SecondController : ViewModelController(), KoinComponent {
 
     init {
         LeakSentry.refWatcher.watch(this)
+
     }
 
-    private val vm by lazy {
-        ViewModelProviders.of(activity as FragmentActivity, get<SecondViewModel.Factory>()).get(SecondViewModel::class.java)
-    }
-
+    private val vm  =   this.of(get<SecondViewModel.Factory>()).get(SecondViewModel::class.java)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         Log.d("SecondController", "onCreateView $vm")
-
+        lifecycle.addObserver(vm)
 
         return TextView(inflater.context).apply {
             text = this@SecondController::class.java.name
+            vm.live.observe(this@SecondController, Observer {
+                this.append("\r\n" + it)
+            })
+
+            setOnClickListener {
+
+            }
         }
     }
 
     override fun onDestroy() {
-
         Log.d("SecondController", "onDestroy   $vm")
+        lifecycle.removeObserver(vm)
         super.onDestroy()
     }
 
