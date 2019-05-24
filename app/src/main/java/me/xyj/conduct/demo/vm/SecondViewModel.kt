@@ -9,13 +9,10 @@ class SecondViewModel(val demoRepo: DemoRepo) : ViewModel(), LifecycleObserver {
 
     val live = MutableLiveData<String>()
 
-    init {
-        LeakSentry.refWatcher.watch(this)
-    }
-
     override fun onCleared() {
         super.onCleared()
         Log.d("HomeViewModel", "onCleared")
+        LeakSentry.refWatcher.watch(this)
     }
 
 

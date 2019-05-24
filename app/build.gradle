@@ -16,7 +16,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -47,7 +47,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
-
+    implementation 'com.squareup.leakcanary:leaksentry:2.0-alpha-2'
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'

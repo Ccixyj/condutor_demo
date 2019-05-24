@@ -3,7 +3,6 @@ package me.xyj.conduct.demo
 import android.app.Application
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import leakcanary.LeakCanary
 import leakcanary.LeakSentry
 import me.xyj.conduct.demo.vm.DemoRepo
 import me.xyj.conduct.demo.vm.SecondViewModel
@@ -25,10 +24,8 @@ class App : Application() {
                 watchActivities = true,
                 enabled = true,
                 watchFragments = true,
-                watchDurationMillis = 30000
+                watchDurationMillis = 6000
             )
-        LeakCanary.config =
-            LeakCanary.config.copy(retainedVisibleThreshold = 1)
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@App)

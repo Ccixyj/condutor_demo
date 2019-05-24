@@ -8,13 +8,10 @@ class HomeViewModel : ViewModel(), LifecycleObserver {
 
     val live = MutableLiveData<String>()
 
-    init {
-        LeakSentry.refWatcher.watch(this)
-    }
-
     override fun onCleared() {
         super.onCleared()
         Log.d("HomeViewModel", "onCleared")
+        LeakSentry.refWatcher.watch(this)
     }
 
 
@@ -23,4 +20,5 @@ class HomeViewModel : ViewModel(), LifecycleObserver {
         Log.d("SecondViewModel", "$event / ${owner.lifecycle.currentState}: owner -> $owner ")
         live.value = "$event / ${owner.lifecycle.currentState}: owner -> $owner "
     }
+
 }

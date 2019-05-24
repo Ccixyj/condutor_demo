@@ -19,9 +19,6 @@ import org.koin.core.get
 
 class HomeController : ViewModelController(), KoinComponent {
 
-    init {
-        LeakSentry.refWatcher.watch(this)
-    }
 
     private val vm by lazy {
         ViewModelProviders.of(activity as FragmentActivity).get(HomeViewModel::class.java)
@@ -62,6 +59,7 @@ class HomeController : ViewModelController(), KoinComponent {
     override fun onDestroy() {
         Log.d("HomeController", "onDestroy   $vm")
         super.onDestroy()
+        LeakSentry.refWatcher.watch(this)
     }
 
     override fun onDestroyView(view: View) {
