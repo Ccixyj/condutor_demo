@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import leakcanary.LeakSentry
 import me.xyj.conduct.demo.vm.base.ViewModelController
 import org.koin.core.KoinComponent
 import org.koin.core.get
@@ -35,7 +34,6 @@ class SecondController : ViewModelController(), KoinComponent {
         Log.d("SecondController", "onDestroy   $vm")
         lifecycle.removeObserver(vm)
         super.onDestroy()
-        LeakSentry.refWatcher.watch(this)
     }
 
     override fun onDestroyView(view: View) {

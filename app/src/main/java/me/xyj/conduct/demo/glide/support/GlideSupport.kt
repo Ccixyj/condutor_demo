@@ -21,13 +21,15 @@ class GlideSupport(private val controller: Controller) : RequestManagerTreeNode 
             var hasExited: Boolean = false
 
 
-            override fun postCreateView(controller: Controller, view: View) {
-                lifecycle = ControllerLifecycle()
+            override fun preCreateView(controller: Controller) {
+                val ac = controller.activity!!
+                val lifecycle = ControllerLifecycle()
+                this@GlideSupport.lifecycle = lifecycle
                 requestManager = RequestManager(
-                    Glide.get(controller.activity!!),
-                    lifecycle!!,
+                    Glide.get(ac),
+                    lifecycle,
                     this@GlideSupport,
-                    controller.activity!!
+                    ac
                 )
                 hasDestroyedGlide = false
             }
@@ -85,8 +87,8 @@ class GlideSupport(private val controller: Controller) : RequestManagerTreeNode 
     ): Set<RequestManager> {
 
         if (!controller.isDestroyed && !controller.isBeingDestroyed) {
-            if (controller is HasGlideSupport) {
-                controller.glideSupport.requestManager?.let {
+            if (controller is IGlideSupportProvider) {
+                controller.provider.requestManager?.let {
                     collected.add(it)
                 }
             }
@@ -98,5 +100,9 @@ class GlideSupport(private val controller: Controller) : RequestManagerTreeNode 
         }
 
         return collected
+    }
+
+    companion object{
+        fun with(controller: Controller) = GlideSupport(controller).requestManager
     }
 }

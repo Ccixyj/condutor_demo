@@ -12,25 +12,26 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.controller_recycle.view.*
 import me.xyj.conduct.demo.R
-import me.xyj.conduct.demo.glide.support.ControllerRequestManager
 import me.xyj.conduct.demo.glide.support.GlideSupport
-import me.xyj.conduct.demo.glide.support.HasGlideSupport
+import me.xyj.conduct.demo.glide.support.IGlideSupportProvider
 import me.xyj.conduct.demo.vm.base.ViewModelController
 
-class RecycleController() : ViewModelController(), HasGlideSupport {
-
-    override val glideSupport: GlideSupport = GlideSupport(this)
+class RecycleController : ViewModelController(),
+    IGlideSupportProvider  {
+    override val provider: GlideSupport = GlideSupport(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val v = inflater.inflate(R.layout.controller_recycle, container, false)
         Log.d("onCreateView", "${v.rv_imgs} -> ${v.rv_imgs.layoutManager}")
         val rv = v.rv_imgs
+
         rv.layoutManager = FlexboxLayoutManager(applicationContext).apply {
             flexWrap = FlexWrap.WRAP
         }
         rv.adapter = CatAdapter()
         return v
     }
+
 
     inner class CatAdapter : RecyclerView.Adapter<CatViewHolder>() {
 
@@ -81,7 +82,7 @@ class RecycleController() : ViewModelController(), HasGlideSupport {
 
         internal fun bindTo(drawableRes: String) {
             println("bind $drawableRes ${imageView.layoutParams}")
-            ControllerRequestManager.with(this@RecycleController)
+            glide()
                 .load(drawableRes)
                 .skipMemoryCache(true)
                 .override(Target.SIZE_ORIGINAL)

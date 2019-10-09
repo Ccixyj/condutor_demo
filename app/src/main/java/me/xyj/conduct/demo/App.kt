@@ -3,7 +3,7 @@ package me.xyj.conduct.demo
 import android.app.Application
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import leakcanary.LeakSentry
+import leakcanary.AppWatcher
 import me.xyj.conduct.demo.vm.DemoRepo
 import me.xyj.conduct.demo.vm.SecondViewModel
 import org.koin.android.ext.koin.androidContext
@@ -18,14 +18,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        LeakSentry.config =
-            LeakSentry.config.copy(
-                watchFragmentViews = true,
-                watchActivities = true,
-                enabled = true,
-                watchFragments = true,
-                watchDurationMillis = 6000
-            )
+        AppWatcher.config = AppWatcher.config.copy(watchFragmentViews = true)
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@App)
@@ -38,7 +31,9 @@ class App : Application() {
                 single { SecondViewModel.Factory(get()) }
                 viewModel { SecondViewModel(get()) }
             }
-            loadKoinModules(MainActivity.mainModule, controllerModuel, repos)
+            loadKoinModules(MainActivity.mainModule)
+            loadKoinModules(controllerModuel)
+            loadKoinModules(repos)
         }
     }
 }

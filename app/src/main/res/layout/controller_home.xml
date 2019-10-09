@@ -23,4 +23,29 @@
         android:layout_height="46dp"
         android:text="go recycle"/>
 
+    <TextView
+        android:id="@+id/tv_camera"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="go camera"/>
+
+    <TextView
+        android:id="@+id/tv_camerax"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="go camerax"/>
+
+    <TextView
+        android:id="@+id/tv_camerakit"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="go camerakit"/>
+
+    <TextView
+        android:id="@+id/tv_camerakit_v"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="go camerakit v"/>
+
+
 </LinearLayout>

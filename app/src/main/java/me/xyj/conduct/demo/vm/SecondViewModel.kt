@@ -2,7 +2,7 @@ package me.xyj.conduct.demo.vm
 
 import android.util.Log
 import androidx.lifecycle.*
-import leakcanary.LeakSentry
+import leakcanary.AppWatcher
 
 class SecondViewModel(val demoRepo: DemoRepo) : ViewModel(), LifecycleObserver {
 
@@ -12,7 +12,7 @@ class SecondViewModel(val demoRepo: DemoRepo) : ViewModel(), LifecycleObserver {
     override fun onCleared() {
         super.onCleared()
         Log.d("HomeViewModel", "onCleared")
-        LeakSentry.refWatcher.watch(this)
+        AppWatcher.objectWatcher.watch(this)
     }
 
 
